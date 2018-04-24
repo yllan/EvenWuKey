@@ -87,6 +87,7 @@
 			buildPhases = (
 				85CF7D2D208E26AF001D5BD0 /* Sources */,
 				85CF7D2E208E26AF001D5BD0 /* Frameworks */,
+				85D86409208F32A10049D99E /* ShellScript */,
 				85CF7D2F208E26AF001D5BD0 /* Resources */,
 			);
 			buildRules = (
@@ -147,6 +148,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		85D86409208F32A10049D99E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		85CF7D2D208E26AF001D5BD0 /* Sources */ = {

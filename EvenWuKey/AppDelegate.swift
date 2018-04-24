@@ -152,7 +152,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     ]
     
     var keys: Set<UInt16> = Set()
-    var window: NSWindow = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 300, height: 80), styleMask: [.borderless], backing: .buffered, defer: false, screen: nil)
+    var window: NSWindow = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 300, height: 80), styleMask: [], backing: .buffered, defer: false, screen: nil)
     var label = NSTextField(labelWithString: "")
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -181,7 +181,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.level = .statusBar
         window.makeKeyAndOrderFront(nil)
         
-        NSEvent.addGlobalMonitorForEvents(matching: [.keyUp, .keyDown, .flagsChanged]) { (event) in
+        let handler: ((NSEvent) -> NSEvent?) = { (event: NSEvent) in
+            print("\(event)")
             switch event.type {
             case .keyDown:
                 self.keys.insert(event.keyCode)
@@ -195,7 +196,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             default:
                 break
             }
+            return event
         }
+        
+        NSEvent.addGlobalMonitorForEvents(matching: [.keyUp, .keyDown, .flagsChanged], handler: { _ = handler($0) })
+        NSEvent.addLocalMonitorForEvents(matching: [.keyUp, .keyDown, .flagsChanged], handler: handler)
     }
     
     func handleFlagsChanged(_ event: NSEvent) {

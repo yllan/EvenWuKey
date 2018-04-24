@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import CoreGraphics
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -181,53 +182,75 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.level = .statusBar
         window.makeKeyAndOrderFront(nil)
         
-        let handler: ((NSEvent) -> NSEvent?) = { (event: NSEvent) in
-            print("\(event)")
-            switch event.type {
-            case .keyDown:
-                self.keys.insert(event.keyCode)
-                self.refreshDisplay()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.10, execute: self.refreshDisplay)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: self.refreshDisplay)
-            case .keyUp:
-                self.keys.remove(event.keyCode)
-            case .flagsChanged:
-                self.handleFlagsChanged(event)
-            default:
-                break
-            }
-            return event
-        }
-        
-        NSEvent.addGlobalMonitorForEvents(matching: [.keyUp, .keyDown, .flagsChanged], handler: { _ = handler($0) })
-        NSEvent.addLocalMonitorForEvents(matching: [.keyUp, .keyDown, .flagsChanged], handler: handler)
+        installKeyEventListener()
     }
     
-    func handleFlagsChanged(_ event: NSEvent) {
-        var keyDown = false
-        switch event.keyCode {
-        case 55, 54: // Command
-            keyDown = event.modifierFlags.contains(.command)
-        case 58, 61: // Option
-            keyDown = event.modifierFlags.contains(.option)
-        case 59:     // Control
-            keyDown = event.modifierFlags.contains(.control)
-        case 56, 60: // Shift
-            keyDown = event.modifierFlags.contains(.shift)
-        case 57:     // Caps Lock
-            keyDown = event.modifierFlags.contains(.capsLock)
-        default:
-            return
-        }
+    func installKeyEventListener() {
+        let eventMaskList = [
+            CGEventType.keyDown.rawValue,
+            CGEventType.keyUp.rawValue,
+            CGEventType.flagsChanged.rawValue,
+            UInt32(NX_SYSDEFINED) // Media key Event
+        ]
         
-        if keyDown {
-            self.keys.insert(event.keyCode)
-            self.refreshDisplay()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.10, execute: self.refreshDisplay)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: self.refreshDisplay)
-        } else {
-            self.keys.remove(event.keyCode)
+        let eventMask: UInt64 = eventMaskList.reduce(UInt64(0)) { $0 | (1 << $1) }
+        let observer = UnsafeMutableRawPointer(Unmanaged.passRetained(self).toOpaque())
+        if let eventTap = CGEvent.tapCreate(tap: .cghidEventTap, place: .tailAppendEventTap, options: .listenOnly, eventsOfInterest: eventMask, callback: { (proxy, type, event, refcon) -> Unmanaged<CGEvent>? in
+            if let observer = refcon {
+                let mySelf = Unmanaged<AppDelegate>.fromOpaque(observer).takeUnretainedValue()
+                switch type {
+                case .keyDown:
+                    mySelf.keyDown(event)
+                case .keyUp:
+                    mySelf.keyUp(event)
+                case .flagsChanged:
+                    let flagFor: [CGKeyCode: CGEventFlags] = [54: CGEventFlags.maskCommand,
+                                                              55: CGEventFlags.maskCommand,
+                                                              56: CGEventFlags.maskShift,
+                                                              60: CGEventFlags.maskShift,
+                                                              59: CGEventFlags.maskControl,
+                                                              62: CGEventFlags.maskControl,
+                                                              58: CGEventFlags.maskAlternate,
+                                                              61: CGEventFlags.maskAlternate,
+                                                              63: CGEventFlags.maskSecondaryFn,
+                                                              57: CGEventFlags.maskAlphaShift]
+                    if let flag = flagFor[event.keyCode()] {
+                        event.flags.contains(flag) ? mySelf.modifierDown(event) : mySelf.modifierUp(event)
+                    } else {
+                        print("Unhandled!")
+                    }
+                default:
+                    print("*** unhandled ***")
+                }
+                
+            }
+            return Unmanaged.passUnretained(event)
+        }, userInfo: observer) {
+            let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
+            CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
+            CGEvent.tapEnable(tap: eventTap, enable: true)
+            CFRunLoopRun()
         }
+    }
+    
+    func keyDown(_ event: CGEvent) {
+        keys.insert(event.keyCode())
+        refreshDisplay()
+    }
+    
+    func keyUp(_ event: CGEvent) {
+        keys.remove(event.keyCode())
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6, execute: self.refreshDisplay)
+    }
+
+    func modifierDown(_ event: CGEvent) {
+        keys.insert(event.keyCode())
+        refreshDisplay()
+    }
+    
+    func modifierUp(_ event: CGEvent) {
+        keys.remove(event.keyCode())
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6, execute: self.refreshDisplay)
     }
     
     func refreshDisplay() {
@@ -265,4 +288,3 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Insert code here to tear down your application
     }
 }
-

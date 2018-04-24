@@ -11,6 +11,7 @@
 		85CF7D39208E26B1001D5BD0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 85CF7D38208E26B1001D5BD0 /* Assets.xcassets */; };
 		85CF7D3C208E26B1001D5BD0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85CF7D3A208E26B1001D5BD0 /* Main.storyboard */; };
 		85CF7D46208E2B86001D5BD0 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85CF7D45208E2B86001D5BD0 /* ApplicationServices.framework */; };
+		85D86406208F0F370049D99E /* CGEvent+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D86405208F0F370049D99E /* CGEvent+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +22,7 @@
 		85CF7D3D208E26B1001D5BD0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		85CF7D3E208E26B1001D5BD0 /* EvenWuKey.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EvenWuKey.entitlements; sourceTree = "<group>"; };
 		85CF7D45208E2B86001D5BD0 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
+		85D86405208F0F370049D99E /* CGEvent+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGEvent+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			isa = PBXGroup;
 			children = (
 				85CF7D34208E26AF001D5BD0 /* AppDelegate.swift */,
+				85D86405208F0F370049D99E /* CGEvent+Extension.swift */,
 				85CF7D38208E26B1001D5BD0 /* Assets.xcassets */,
 				85CF7D3A208E26B1001D5BD0 /* Main.storyboard */,
 				85CF7D3D208E26B1001D5BD0 /* Info.plist */,
@@ -147,6 +150,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85D86406208F0F370049D99E /* CGEvent+Extension.swift in Sources */,
 				85CF7D35208E26AF001D5BD0 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

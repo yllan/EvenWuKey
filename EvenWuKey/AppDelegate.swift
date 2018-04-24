@@ -11,6 +11,12 @@ import CoreGraphics
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
+    var display: DisplayStyle = HUDStyle() {
+        didSet {
+            oldValue.hide()
+        }
+    }
+    
     let defaultOrder: [UInt16] = [
         59, // Control
         58, // Option
@@ -153,8 +159,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     ]
     
     var keys: Set<UInt16> = Set()
-    var window: NSWindow = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 300, height: 80), styleMask: [], backing: .buffered, defer: false, screen: nil)
-    var label = NSTextField(labelWithString: "")
+    
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String : true]
@@ -164,23 +169,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             print("Access Not Enabled")
             // TODO:
         }
-
-        label.font = NSFont.boldSystemFont(ofSize: 28)
-        label.textColor = NSColor.white
-        label.alignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        if let v = window.contentView {
-            v.addSubview(label)
-            NSLayoutConstraint.activate([
-                label.centerXAnchor.constraint(equalTo: v.centerXAnchor),
-                label.centerYAnchor.constraint(equalTo: v.centerYAnchor),
-            ])
-        }
-        window.isOpaque = false
-        window.backgroundColor = NSColor(white: 0, alpha: 0.5)
-        window.center()
-        window.level = .statusBar
-        window.makeKeyAndOrderFront(nil)
         
         installKeyEventListener()
     }
@@ -217,10 +205,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     if let flag = flagFor[event.keyCode()] {
                         event.flags.contains(flag) ? mySelf.modifierDown(event) : mySelf.modifierUp(event)
                     } else {
-                        print("Unhandled!")
+                        // TODO: error handle
                     }
                 default:
-                    print("*** unhandled ***")
+                    break
                 }
                 
             }
@@ -255,9 +243,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func refreshDisplay() {
         if self.keys.isEmpty {
-            label.stringValue = ""
+            display.hide()
         } else {
-            label.stringValue = self.pressingKeys()
+            display.show(self.pressingKeys())
         }
     }
     

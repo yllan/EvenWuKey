@@ -159,7 +159,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     ]
     
     var keys: Set<UInt16> = Set()
-    
+    var statusItem: NSStatusItem? = nil
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String : true]
@@ -171,6 +171,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         installKeyEventListener()
+        installStatusItem()
+    }
+    
+    func installStatusItem() {
+        let statusBar = NSStatusBar.system
+        let item = statusBar.statusItem(withLength: NSStatusItem.squareLength)
+        let menu = NSMenu(title: "Ha")
+        menu.addItem(withTitle: "Hello", action: nil, keyEquivalent: "")
+        menu.addItem(withTitle: "World", action: nil, keyEquivalent: "")
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(withTitle: "Quit", action: nil, keyEquivalent: "")
+        item.menu = menu
+        item.highlightMode = true
+        self.statusItem = item
     }
     
     func installKeyEventListener() {

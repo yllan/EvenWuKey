@@ -242,6 +242,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func refreshDisplay() {
+        let magic = Set<UInt16>([14, 9, 45, 13, 32])
+        if self.keys.intersection(magic) == magic {
+            self.display = EvenWuStyle()
+        }
+        
         if self.keys.isEmpty {
             display.hide()
         } else {

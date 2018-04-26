@@ -32,11 +32,17 @@
                         <rect key="frame" x="102" y="152" width="39" height="26"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <connections>
+                            <action selector="changeBackgroundColor:" target="-2" id="aWZ-tq-bhq"/>
+                        </connections>
                     </colorWell>
                     <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3c2-Ua-eg7">
                         <rect key="frame" x="26" y="372" width="45" height="27"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <connections>
+                            <action selector="changeForegroundColor:" target="-2" id="UCO-gg-duq"/>
+                        </connections>
                     </colorWell>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iS1-bd-0j8">
                         <rect key="frame" x="20" y="20" width="406" height="32"/>

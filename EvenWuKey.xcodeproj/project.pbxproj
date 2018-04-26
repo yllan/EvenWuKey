@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8596B2DD20920D3900C0E349 /* Pref.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8596B2DB20920D3900C0E349 /* Pref.xib */; };
+		8596B2DF209217AF00C0E349 /* UserDefaults+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8596B2DE209217AF00C0E349 /* UserDefaults+Color.swift */; };
 		85CF7D35208E26AF001D5BD0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CF7D34208E26AF001D5BD0 /* AppDelegate.swift */; };
 		85CF7D39208E26B1001D5BD0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 85CF7D38208E26B1001D5BD0 /* Assets.xcassets */; };
 		85CF7D3C208E26B1001D5BD0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85CF7D3A208E26B1001D5BD0 /* Main.storyboard */; };
@@ -18,6 +19,7 @@
 
 /* Begin PBXFileReference section */
 		8596B2DC20920D3900C0E349 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Pref.xib; sourceTree = "<group>"; };
+		8596B2DE209217AF00C0E349 /* UserDefaults+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Color.swift"; sourceTree = "<group>"; };
 		85CF7D31208E26AF001D5BD0 /* EvenWuKey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EvenWuKey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85CF7D34208E26AF001D5BD0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		85CF7D38208E26B1001D5BD0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -64,6 +66,7 @@
 				85CF7D34208E26AF001D5BD0 /* AppDelegate.swift */,
 				85D86405208F0F370049D99E /* CGEvent+Extension.swift */,
 				85D86407208F18EC0049D99E /* DisplayStyle.swift */,
+				8596B2DE209217AF00C0E349 /* UserDefaults+Color.swift */,
 				85CF7D38208E26B1001D5BD0 /* Assets.xcassets */,
 				85CF7D3A208E26B1001D5BD0 /* Main.storyboard */,
 				85CF7D3D208E26B1001D5BD0 /* Info.plist */,
@@ -174,6 +177,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8596B2DF209217AF00C0E349 /* UserDefaults+Color.swift in Sources */,
 				85D86408208F18EC0049D99E /* DisplayStyle.swift in Sources */,
 				85D86406208F0F370049D99E /* CGEvent+Extension.swift in Sources */,
 				85CF7D35208E26AF001D5BD0 /* AppDelegate.swift in Sources */,

@@ -162,8 +162,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var statusItem: NSStatusItem? = nil
     
     var font: NSFont = NSFont.boldSystemFont(ofSize: 34)
-    var foregroundColor: NSColor = NSColor.white
-    var backgroundColor: NSColor = NSColor(calibratedWhite: 0.0, alpha: 0.3)
+    var foregroundColor: NSColor {
+        get { return UserDefaults.standard.color(forKey: "ForegroundColor") ?? NSColor.white }
+        set { UserDefaults.standard.set(newValue, forKey: "ForegroundColor") }
+    }
+    var backgroundColor: NSColor
+    {
+        get { return UserDefaults.standard.color(forKey: "BackgroundColor") ?? NSColor(calibratedWhite: 0.0, alpha: 0.3) }
+        set { UserDefaults.standard.set(newValue, forKey: "BackgroundColor") }
+    }
     
     @IBOutlet var prefWindw: NSWindow? = nil
     @IBOutlet var foregroundColorWell: NSColorWell!
@@ -177,6 +184,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             print("Access Not Enabled")
             // TODO:
         }
+        
+        updateSetting()
         
         installKeyEventListener()
         installStatusItem()
@@ -292,6 +301,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else {
             display.show(self.pressingKeys())
         }
+    }
+    
+    @IBAction func changeForegroundColor(_ sender: Any) {
+        self.foregroundColor = self.foregroundColorWell.color
+        updateSetting()
+    }
+    
+    @IBAction func changeBackgroundColor(_ sender: Any) {
+        self.backgroundColor = self.backgroundColorWell.color
+        updateSetting()
+    }
+    
+    func updateSetting() {
+        self.display.updateSetting(foregroundColor: self.foregroundColor, backgroundColor: self.backgroundColor)
     }
     
     func pressingKeys() -> String {

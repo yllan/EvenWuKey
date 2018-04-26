@@ -11,6 +11,7 @@ import Cocoa
 protocol DisplayStyle {
     func show(_ info: String)
     func hide()
+    func updateSetting(foregroundColor: NSColor, backgroundColor: NSColor)
 }
 
 class HUDStyle : DisplayStyle {
@@ -19,7 +20,6 @@ class HUDStyle : DisplayStyle {
     
     init() {
         label.font = NSFont.boldSystemFont(ofSize: 34)
-        label.textColor = NSColor.white
         label.alignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         if let v = window.contentView {
@@ -32,7 +32,6 @@ class HUDStyle : DisplayStyle {
             if let layer = v.layer {
                 layer.cornerRadius = 10
                 layer.masksToBounds = true
-                layer.backgroundColor = NSColor(calibratedWhite: 0.0, alpha: 0.3).cgColor
             }
         }
         window.isOpaque = false
@@ -40,6 +39,13 @@ class HUDStyle : DisplayStyle {
         window.isMovableByWindowBackground = true
         window.level = .statusBar
         window.setFrameAutosaveName(NSWindow.FrameAutosaveName("HUD"))
+    }
+    
+    func updateSetting(foregroundColor: NSColor, backgroundColor: NSColor) {
+        label.textColor = foregroundColor
+        if let v = window.contentView, let layer = v.layer {
+            layer.backgroundColor = backgroundColor.cgColor
+        }
     }
     
     func show(_ info: String) {
@@ -126,4 +132,6 @@ class EvenWuStyle : DisplayStyle {
         window.animator().setFrame(newFrame, display: true, animate: true)
         //        window.animator().alphaValue = 0.0
     }
+    
+    func updateSetting(foregroundColor: NSColor, backgroundColor: NSColor) {}
 }

@@ -161,6 +161,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var keys: Set<UInt16> = Set()
     var statusItem: NSStatusItem? = nil
     
+    var font: NSFont = NSFont.boldSystemFont(ofSize: 34)
+    var foregroundColor: NSColor = NSColor.white
+    var backgroundColor: NSColor = NSColor(calibratedWhite: 0.0, alpha: 0.3)
+    
+    @IBOutlet var prefWindw: NSWindow? = nil
+    @IBOutlet var foregroundColorWell: NSColorWell!
+    @IBOutlet var backgroundColorWell: NSColorWell!
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String : true]
         let accessEnabled = AXIsProcessTrustedWithOptions(options)
@@ -177,14 +185,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func installStatusItem() {
         let statusBar = NSStatusBar.system
         let item = statusBar.statusItem(withLength: NSStatusItem.squareLength)
-        let menu = NSMenu(title: "Ha")
-        menu.addItem(withTitle: "Hello", action: nil, keyEquivalent: "")
-        menu.addItem(withTitle: "World", action: nil, keyEquivalent: "")
+        let menu = NSMenu(title: "")
+        menu.addItem(withTitle: "Preferences", action: #selector(showPreferences), keyEquivalent: "")
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(withTitle: "Quit", action: nil, keyEquivalent: "")
+        menu.addItem(withTitle: "Quit", action: #selector(quitApp), keyEquivalent: "")
         item.menu = menu
         item.highlightMode = true
         self.statusItem = item
+    }
+    
+    @IBAction func showPreferences(_ sender: Any) {
+        if NSNib(nibNamed: NSNib.Name("Pref"), bundle: nil)?.instantiate(withOwner: self, topLevelObjects: nil) ?? false {
+            if let prefWindow = self.prefWindw {
+                NSApp.activate(ignoringOtherApps: true)
+                prefWindow.center()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.foregroundColorWell.color = self.foregroundColor
+                    self.backgroundColorWell.color = self.backgroundColor
+                    NSColorPanel.shared.showsAlpha = true
+                    prefWindow.makeKeyAndOrderFront(nil)
+                }
+            }
+        }
+    }
+    
+    @IBAction func quitApp(_ sender: Any) {
+        NSApp.terminate(sender)
     }
     
     func installKeyEventListener() {

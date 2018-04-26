@@ -161,15 +161,37 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var keys: Set<UInt16> = Set()
     var statusItem: NSStatusItem? = nil
     
-    var font: NSFont = NSFont.boldSystemFont(ofSize: 34)
+    var font: NSFont {
+        get {
+            let defaultFont = NSFont.boldSystemFont(ofSize: 34)
+            if let fontName = UserDefaults.standard.string(forKey: "FontName"),
+                UserDefaults.standard.double(forKey: "FontSize") > 0 {
+                let fontSize = UserDefaults.standard.double(forKey: "FontSize")
+                return NSFont(name: fontName, size: CGFloat(fontSize)) ?? defaultFont
+            } else {
+                return defaultFont
+            }
+        }
+        set {
+            UserDefaults.standard.set(newValue.fontName, forKey: "FontName")
+            UserDefaults.standard.set(Double(newValue.pointSize), forKey: "FontSize")
+            UserDefaults.standard.synchronize()
+        }
+    }
     var foregroundColor: NSColor {
         get { return UserDefaults.standard.color(forKey: "ForegroundColor") ?? NSColor.white }
-        set { UserDefaults.standard.set(newValue, forKey: "ForegroundColor") }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "ForegroundColor")
+            UserDefaults.standard.synchronize()
+        }
     }
     var backgroundColor: NSColor
     {
         get { return UserDefaults.standard.color(forKey: "BackgroundColor") ?? NSColor(calibratedWhite: 0.0, alpha: 0.3) }
-        set { UserDefaults.standard.set(newValue, forKey: "BackgroundColor") }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "BackgroundColor")
+            UserDefaults.standard.synchronize()
+        }
     }
     
     @IBOutlet var prefWindw: NSWindow? = nil
@@ -303,18 +325,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    @IBAction func changeForegroundColor(_ sender: Any) {
+    @IBAction func changeForegroundColor(_ sender: Any?) {
         self.foregroundColor = self.foregroundColorWell.color
         updateSetting()
     }
     
-    @IBAction func changeBackgroundColor(_ sender: Any) {
+    @IBAction func changeBackgroundColor(_ sender: Any?) {
         self.backgroundColor = self.backgroundColorWell.color
         updateSetting()
     }
     
+    @IBAction func displayFontPanel(_ sender: Any?) {
+        NSFontManager.shared.setSelectedFont(self.font, isMultiple: false)
+        NSFontManager.shared.target = self
+        NSFontManager.shared.action = #selector(changeFont)
+        NSFontManager.shared.fontPanel(true)?.makeKeyAndOrderFront(sender)
+    }
+    
+    @IBAction override func changeFont(_ sender: Any?) {
+        self.font = NSFontManager.shared.convert(self.font)
+        updateSetting()
+    }
+    
     func updateSetting() {
-        self.display.updateSetting(foregroundColor: self.foregroundColor, backgroundColor: self.backgroundColor)
+        self.display.updateSetting(foregroundColor: self.foregroundColor, backgroundColor: self.backgroundColor, font: self.font)
     }
     
     func pressingKeys() -> String {

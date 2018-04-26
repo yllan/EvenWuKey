@@ -11,7 +11,7 @@ import Cocoa
 protocol DisplayStyle {
     func show(_ info: String)
     func hide()
-    func updateSetting(foregroundColor: NSColor, backgroundColor: NSColor)
+    func updateSetting(foregroundColor: NSColor, backgroundColor: NSColor, font: NSFont)
 }
 
 class HUDStyle : DisplayStyle {
@@ -41,8 +41,9 @@ class HUDStyle : DisplayStyle {
         window.setFrameAutosaveName(NSWindow.FrameAutosaveName("HUD"))
     }
     
-    func updateSetting(foregroundColor: NSColor, backgroundColor: NSColor) {
+    func updateSetting(foregroundColor: NSColor, backgroundColor: NSColor, font: NSFont) {
         label.textColor = foregroundColor
+        label.font = font
         if let v = window.contentView, let layer = v.layer {
             layer.backgroundColor = backgroundColor.cgColor
         }
@@ -133,5 +134,5 @@ class EvenWuStyle : DisplayStyle {
         //        window.animator().alphaValue = 0.0
     }
     
-    func updateSetting(foregroundColor: NSColor, backgroundColor: NSColor) {}
+    func updateSetting(foregroundColor: NSColor, backgroundColor: NSColor, font: NSFont) {}
 }

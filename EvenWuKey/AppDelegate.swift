@@ -222,6 +222,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(withTitle: "Quit", action: #selector(quitApp), keyEquivalent: "")
         item.menu = menu
         item.highlightMode = true
+        item.button?.image = NSImage(named: NSImage.Name("MenuItem"))
         self.statusItem = item
     }
     

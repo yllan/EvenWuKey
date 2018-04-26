@@ -50,12 +50,14 @@ class HUDStyle : DisplayStyle {
                 self.label.stringValue = info
             }
         } else {
+            window.alphaValue = 1.0
             self.label.stringValue = info
         }
     }
     
     func hide() {
         label.stringValue = ""
+        window.animator().alphaValue = 0.0
     }
     
     deinit {

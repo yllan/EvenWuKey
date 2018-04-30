@@ -356,8 +356,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func pressingKeys() -> String {
         let overrideNames: [UInt16: String] = [
-            51: "Delete",
-            48: "Tab",
+            51: "⌫",
+            53: "⎋",
+            48: "⇥",
             57: "CapsLock",
             36: "⏎",
             56: "⇧",

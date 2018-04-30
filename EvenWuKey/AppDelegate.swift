@@ -193,10 +193,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             UserDefaults.standard.synchronize()
         }
     }
+    var radius: CGFloat
+    {
+        get {
+            if UserDefaults.standard.object(forKey: "CornerRadius") == nil {
+                return 4.0
+            } else {
+                return CGFloat(UserDefaults.standard.float(forKey: "CornerRadius"))
+            }
+        }
+        set {
+            UserDefaults.standard.set(Float(newValue), forKey: "CornerRadius")
+            UserDefaults.standard.synchronize()
+        }
+    }
     
     @IBOutlet var prefWindw: NSWindow? = nil
     @IBOutlet var foregroundColorWell: NSColorWell!
     @IBOutlet var backgroundColorWell: NSColorWell!
+    @IBOutlet var radiusField: NSTextField!
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String : true]
@@ -237,6 +252,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 self.foregroundColorWell.color = self.foregroundColor
                 self.backgroundColorWell.color = self.backgroundColor
+                self.radiusField.floatValue = Float(self.radius)
                 NSColorPanel.shared.showsAlpha = true
                 prefWindow.makeKeyAndOrderFront(nil)
             }
@@ -349,9 +365,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.font = NSFontManager.shared.convert(self.font)
         updateSetting()
     }
+    @IBAction func changeRadius(_ sender: Any) {
+        self.radius = CGFloat(radiusField.floatValue)
+        updateSetting()
+    }
     
     func updateSetting() {
-        self.display.updateSetting(foregroundColor: self.foregroundColor, backgroundColor: self.backgroundColor, font: self.font)
+        self.display.updateSetting(foregroundColor: self.foregroundColor,
+                                   backgroundColor: self.backgroundColor,
+                                   font: self.font,
+                                   radius: self.radius)
     }
     
     func pressingKeys() -> String {

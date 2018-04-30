@@ -227,16 +227,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func showPreferences(_ sender: Any) {
-        if NSNib(nibNamed: NSNib.Name("Pref"), bundle: nil)?.instantiate(withOwner: self, topLevelObjects: nil) ?? false {
-            if let prefWindow = self.prefWindw {
-                NSApp.activate(ignoringOtherApps: true)
-                prefWindow.center()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    self.foregroundColorWell.color = self.foregroundColor
-                    self.backgroundColorWell.color = self.backgroundColor
-                    NSColorPanel.shared.showsAlpha = true
-                    prefWindow.makeKeyAndOrderFront(nil)
-                }
+        if self.prefWindw == nil {
+            NSNib(nibNamed: NSNib.Name("Pref"), bundle: nil)?.instantiate(withOwner: self, topLevelObjects: nil)
+        }
+        
+        if let prefWindow = self.prefWindw {
+            NSApp.activate(ignoringOtherApps: true)
+            prefWindow.center()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.foregroundColorWell.color = self.foregroundColor
+                self.backgroundColorWell.color = self.backgroundColor
+                NSColorPanel.shared.showsAlpha = true
+                prefWindow.makeKeyAndOrderFront(nil)
             }
         }
     }

@@ -19,6 +19,7 @@ class HUDStyle : DisplayStyle {
     var label = NSTextField(labelWithString: "")
     
     init() {
+        window.hasShadow = false
         label.font = NSFont.boldSystemFont(ofSize: 34)
         label.alignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -31,7 +32,6 @@ class HUDStyle : DisplayStyle {
             v.wantsLayer = true
             if let layer = v.layer {
                 layer.cornerRadius = 10
-                layer.masksToBounds = true
             }
         }
         window.isOpaque = false
@@ -50,15 +50,12 @@ class HUDStyle : DisplayStyle {
     }
     
     func show(_ info: String) {
+        self.label.stringValue = info
+
         if !window.isVisible {
-            window.orderFrontRegardless()
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                self.label.stringValue = info
-            }
+            window.orderFront(nil)
         } else {
             window.alphaValue = 1.0
-            self.label.stringValue = info
         }
     }
     

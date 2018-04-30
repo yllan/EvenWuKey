@@ -290,8 +290,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                                               62: CGEventFlags.maskControl,
                                                               58: CGEventFlags.maskAlternate,
                                                               61: CGEventFlags.maskAlternate,
-                                                              63: CGEventFlags.maskSecondaryFn,
-                                                              57: CGEventFlags.maskAlphaShift]
+//                                                              63: CGEventFlags.maskSecondaryFn,
+//                                                              57: CGEventFlags.maskAlphaShift]
+                                                            ]
                     if let flag = flagFor[event.keyCode()] {
                         event.flags.contains(flag) ? mySelf.modifierDown(event) : mySelf.modifierUp(event)
                     } else {
